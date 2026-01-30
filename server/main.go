@@ -40,8 +40,8 @@ func main() {
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true",
 		os.Getenv("DB_USER"),
 		os.Getenv("DB_PASSWORD"),
-		dbPort,
 		dbHost,
+		dbPort,
 		os.Getenv("DB_NAME"),
 	)
 
