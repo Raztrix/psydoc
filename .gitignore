@@ -1,0 +1,19 @@
+﻿# Ignore Dependencies
+node_modules/
+
+# Ignore Build Output
+dist/
+bin/
+main.exe
+main
+
+# Ignore Environment Secrets
+.env
+
+# Ignore User Uploads
+server/uploads/*
+!server/uploads/.gitignore
+
+# Ignore IDE settings
+.idea/
+.vscode/
