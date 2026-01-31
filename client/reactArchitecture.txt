@@ -1,0 +1,31 @@
+﻿src/
+├── app/                  # Global app setup
+│   ├── store.ts          # Root Redux store
+│   ├── routes.tsx        # Router configuration
+│   └── axiosClient.ts    # Global Axios instance (interceptors)
+│
+├── components/           # SHARED "Dumb" UI (The Design System)
+│   ├── ui/               # Generic building blocks (Button, Card, Input)
+│   ├── layout/           # Sidebar, Navbar, PageWrapper
+│   └── Feedback/         # Toast, Modal, Spinner
+│
+├── features/             # THE CORE LOGIC (Domain Driven)
+│   ├── documents/        # Feature: Document Management
+│   │   ├── components/   # FileUpload.tsx, FileList.tsx
+│   │   ├── fileSlice.ts  # Redux logic for THIS feature
+│   │   ├── fileApi.ts    # API calls for THIS feature
+│   │   └── types.ts      # TypeScript interfaces
+│   │
+│   ├── crm/              # Feature: (Future) Contacts & Deals
+│   │   ├── components/   # ContactCard, DealStage
+│   │   └── crmSlice.ts
+│   │
+│   └── form-builder/     # Feature: (Future) Drag-and-drop forms
+│
+├── hooks/                # Global generic hooks (useDebounce, useWindowSize)
+├── pages/                # Route Entry Points (They just assemble Features)
+│   ├── Dashboard.tsx
+│   ├── Settings.tsx
+│   └── DocumentCenter.tsx
+│
+└── utils/                # Pure functions (dateFormatter, validation)
