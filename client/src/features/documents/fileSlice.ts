@@ -21,7 +21,7 @@ const initialState: FileState = {
     uploadError: null,
 };
 
-// 3. Create the Slice
+
 const fileSlice = createSlice({
     name: 'files',
     initialState,

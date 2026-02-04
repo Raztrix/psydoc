@@ -3,7 +3,7 @@ import axios from 'axios';
 import { UploadCloud, CheckCircle, XCircle, Loader2 } from 'lucide-react';
 // Import Redux hooks
 import { useAppDispatch, useAppSelector } from '../../../hooks/hooks.ts';
-import { startUpload, uploadSuccess, uploadFailure } from '../fileSlice.ts';
+import {startUpload, uploadSuccess, uploadFailure} from '../fileSlice.ts';
 
 export default function FileUpload() {
     const [file, setFile] = useState<File | null>(null);
@@ -30,18 +30,23 @@ export default function FileUpload() {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
 
-            // 2. Tell Redux we finished (Pass the fake file data for now)
-            dispatch(uploadSuccess({
-                filename: file.name,
-                description: description,
-                uploadDate: new Date().toISOString()
-            }));
+            console.log(res);
 
-            setSuccessMsg(true);
+            if (res.status === 201) {
+
+                dispatch(uploadSuccess({
+                    filename: file.name,
+                    description: description,
+                    uploadDate: new Date().toISOString()
+                }));
+                setSuccessMsg(true);
+            }
+
+
+
             setFile(null);
             setDescription('');
-
-            setTimeout(() => setSuccessMsg(false), 3000);
+            setSuccessMsg(false);
 
         } catch (err: any) {
             console.error(err);

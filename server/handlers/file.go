@@ -2,12 +2,14 @@
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 
-	"github.com/go-chi/chi/v5"
 	"server/dto"
 	"server/service"
+
+	"github.com/go-chi/chi/v5"
 )
 
 type FileHandler struct {
@@ -77,7 +79,7 @@ func (h *FileHandler) DownloadFile(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Force download
-	w.Header().Set("Content-Disposition", "attachment; filename="+file.OriginalName)
+	w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s\"", file.OriginalName))
 	w.Header().Set("Content-Type", "application/octet-stream")
 	http.ServeFile(w, r, path)
 }
