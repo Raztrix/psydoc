@@ -1,0 +1,27 @@
+﻿# Dockerfile.dev
+
+# 1. Use the Golang image (contains the Go compiler)
+FROM golang:1.24-alpine
+
+# 2. Set working directory
+WORKDIR /app
+
+# 3. Install Air (Hot Reload tool)
+# This installs the binary to /go/bin/air
+RUN go install github.com/air-verse/air@v1.61.0
+
+# 1. Install Delve
+RUN go install github.com/go-delve/delve/cmd/dlv@latest
+
+# 4. Copy module files and download dependencies
+COPY go.mod go.sum ./
+RUN go mod download
+
+# 5. Copy source code
+COPY . .
+
+# 6. Expose the port
+EXPOSE 8080
+
+# 7. Run Air (which will run your app)
+CMD ["air", "-c", ".air.toml"]

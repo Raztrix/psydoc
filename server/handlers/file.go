@@ -44,16 +44,14 @@ func (h *FileHandler) UploadFile(w http.ResponseWriter, r *http.Request) {
 
 	description := r.FormValue("description")
 
-	// Call Business Logic
 	savedFile, err := h.Service.SaveFile(file, header, description)
 	if err != nil {
 		h.WriteJSON(w, http.StatusInternalServerError, dto.CreateError(err.Error(), "SAVE_FAILED"))
 		return
 	}
-
-	// Map to DTO
+	
 	fileDto := dto.FileResponse{
-		ID:         savedFile.FileID,
+		ID:         savedFile.Id,
 		FileName:   savedFile.OriginalName,
 		SizeMB:     float64(savedFile.SizeBytes) / 1024 / 1024,
 		UploadedAt: savedFile.CreatedAt,
@@ -96,7 +94,7 @@ func (h *FileHandler) GetFiles(w http.ResponseWriter, r *http.Request) {
 	var fileDtos []dto.FileResponse
 	for _, f := range files {
 		fileDtos = append(fileDtos, dto.FileResponse{
-			ID:         f.FileID,
+			ID:         f.Id,
 			FileName:   f.OriginalName,
 			SizeMB:     float64(f.SizeBytes) / 1024 / 1024,
 			UploadedAt: f.CreatedAt,

@@ -85,13 +85,13 @@ func main() {
 	r.Route("/api", func(r chi.Router) {
 		// Health Check
 		r.Get("/health", func(w http.ResponseWriter, r *http.Request) {
-			w.Write([]byte("OK"))
+			w.Write([]byte("UPDATED FROM DOCKER!"))
 		})
 
 		// File Routes
 		r.Post("/upload", fileHandler.UploadFile)
-		r.Get("/files", fileHandler.GetFiles)
 		r.Get("/download/{id}", fileHandler.DownloadFile)
+		r.Get("/getfiles", fileHandler.GetFiles)
 	})
 
 	// 6. Start Server

@@ -76,7 +76,7 @@ func (s *fileService) SaveFile(file multipart.File, header *multipart.FileHeader
 		os.Remove(fullPath)
 		return nil, err
 	}
-	fileModel.FileID = id
+	fileModel.Id = id
 
 	return fileModel, nil
 }

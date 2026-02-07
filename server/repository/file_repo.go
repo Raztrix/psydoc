@@ -37,10 +37,10 @@ func (r *sqlFileRepo) Create(file *models.File) (int, error) {
 }
 
 func (r *sqlFileRepo) GetByID(id int) (*models.File, error) {
-	row := r.DB.QueryRow("SELECT fileID, fileName, originalName, description, sizeBytes, createdAt FROM files WHERE id = ?", id)
+	row := r.DB.QueryRow("SELECT id, fileName, originalName, description, sizeBytes, createdAt FROM files WHERE id = ?", id)
 
 	var f models.File
-	if err := row.Scan(&f.FileID, &f.FileName, &f.OriginalName, &f.Description, &f.SizeBytes, &f.CreatedAt); err != nil {
+	if err := row.Scan(&f.Id, &f.FileName, &f.OriginalName, &f.Description, &f.SizeBytes, &f.CreatedAt); err != nil {
 		return nil, err
 	}
 	return &f, nil
@@ -56,7 +56,7 @@ func (r *sqlFileRepo) GetAll() ([]models.File, error) {
 	var files []models.File
 	for rows.Next() {
 		var f models.File
-		if err := rows.Scan(&f.FileID, &f.FileName, &f.OriginalName, &f.Description, &f.SizeBytes, &f.CreatedAt); err != nil {
+		if err := rows.Scan(&f.Id, &f.FileName, &f.OriginalName, &f.Description, &f.SizeBytes, &f.CreatedAt); err != nil {
 			continue
 		}
 		files = append(files, f)

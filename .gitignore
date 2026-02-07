@@ -1,5 +1,6 @@
 ﻿# Ignore Dependencies
 node_modules/
+client/dist/
 
 # Ignore Build Output
 dist/
@@ -17,3 +18,7 @@ server/uploads/*
 # Ignore IDE settings
 .idea/
 .vscode/
+
+# Go / Air
+server/tmp/
+server/main   # (The compiled binary)

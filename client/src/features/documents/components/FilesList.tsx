@@ -1,16 +1,26 @@
-﻿import { useAppSelector } from '../../../hooks/hooks.ts';
-import LoadingSpinner from '../../../components/ui/LoadingSpinner.tsx';
+﻿import LoadingSpinner from '../../../components/feedback/LoadingSpinner.tsx';
 import api from '../../../app/axiosClient.ts';
+import type { getFilesResponse, UploadedFile } from '../types/fileTypes.ts';
+import type { AxiosResponse } from 'axios';
+import { useQuery } from '@tanstack/react-query';
+
+const getAllFiles: () => Promise<UploadedFile[]> = async () => {
+  const res: AxiosResponse<getFilesResponse> = await api.get(`/getfiles`);
+  return res.data.data;
+};
 
 export default function FilesList() {
-  const { files, isUploading } = useAppSelector((state) => state.files);
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ['files'], // A unique name for this data
+    queryFn: getAllFiles, // The function that fetches it
+  });
 
   const handleDownload = async (id: number | undefined, originalName: string) => {
     if (id) {
       try {
         // 1. Request the file from the backend
         // We must set responseType to 'blob' so Axios handles the binary data correctly
-        const response = await api.get(`/files/${id}/download`, {
+        const response = await api.get(`/download/${id}`, {
           responseType: 'blob',
         });
 
@@ -38,19 +48,21 @@ export default function FilesList() {
         console.error('Download failed:', error);
         alert('הורדת הקובץ נכשלה. אנא נסה שוב.'); // "File download failed. Please try again."
       }
-    } else {
     }
   };
 
-  return !isUploading ? (
+  if (isLoading) return <LoadingSpinner />;
+  if (isError) return <p>Error: {error.message}</p>;
+
+  return (
     <div className="">
       <h2 className="text-lg font-semibold mb-4 text-gray-700">העלאות אחרונות</h2>
-      {files.length > 0 ? (
+      {data && data.length > 0 ? (
         <ul className="w-full bg-linear-to-br from-slate-900 via-purple-900 to-slate-900 rounded-xl shadow-2xl shadow-purple-900/20 border border-purple-500/30 overflow-hidden">
-          {files.map((file) => (
+          {data.map((file) => (
             <li
               key={file.id}
-              onClick={() => handleDownload(file.id, file.filename)}
+              onClick={() => handleDownload(file.id, file.fileName)}
               className="group flex items-center justify-between p-4 border-b border-purple-500/20 last:border-b-0 hover:bg-white/5 transition-all duration-200 cursor-pointer"
             >
               <div className="flex items-center gap-3">
@@ -58,7 +70,7 @@ export default function FilesList() {
                   📄
                 </span>
                 <span className="text-gray-300 font-medium group-hover:text-white group-hover:drop-shadow-[0_0_5px_rgba(168,85,247,0.5)] transition-all">
-                  {file.filename}
+                  {file.fileName}
                 </span>
               </div>
               <span className="text-purple-400/50 text-sm group-hover:translate-x-1 transition-transform">
@@ -73,7 +85,5 @@ export default function FilesList() {
         </div>
       )}
     </div>
-  ) : (
-    <LoadingSpinner />
   );
 }

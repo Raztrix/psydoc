@@ -9,19 +9,26 @@ services:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       MYSQL_DATABASE: psydoc_db
     ports:
-      - "3306:3306" # We map to 3307 to avoid conflict if you have local MySQL running
+      - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
 
   # 2. The Go Backend
   backend:
-    build: ./server
+    build:
+      context: ./server
+      dockerfile: Dockerfile.dev
     container_name: psydoc-backend
     restart: always
     ports:
       - "8080:8080"
+      - "2345:2345" # FIXED: Added hash for comment
+    security_opt:
+      - "seccomp:unconfined"
+    cap_add:
+      - SYS_PTRACE
     environment:
-      DB_HOST: db # Points to the service name above
+      DB_HOST: db
       DB_PORT: 3306
       DB_USER: root
       DB_PASSWORD: ${DB_PASSWORD}
@@ -29,14 +36,15 @@ services:
     depends_on:
       - db
     volumes:
-      - ./server/uploads:/root/uploads # Save files to your actual hard drive
+      - ./server:/app
+      - ./server/uploads:/app/uploads
 
   # 3. The React Frontend
   frontend:
     build: ./client
     container_name: psydoc-frontend
     ports:
-      - "3000:80" # You will open localhost:3000 in the browser
+      - "3000:80"
     depends_on:
       - backend
 

@@ -10,8 +10,9 @@ type UploadFileRequest struct {
 // FileResponse is the clean DTO we send back to React
 // It inherits nothing, but it WILL be wrapped by Response[T]
 type FileResponse struct {
-	ID         int       `json:"id"`
-	FileName   string    `json:"file_name"` // Pretty name
-	SizeMB     float64   `json:"size_mb"`   // Calculated field
-	UploadedAt time.Time `json:"uploaded_at"`
+	ID          int       `json:"id"`
+	FileName    string    `json:"fileName"` // Pretty name
+	SizeMB      float64   `json:"sizeMB"`   // Calculated field
+	UploadedAt  time.Time `json:"uploadedAt"`
+	Description string    `json:"description"`
 }
